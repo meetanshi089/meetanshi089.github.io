@@ -246,11 +246,15 @@ p{margin:0}
 .acc ul{margin:0;padding-left:18px}
 
 /* Coming soon */
-.soon{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.soon .s{background:var(--surface);border:1.5px dashed var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px}
-.soon h3{font-size:1.0625rem}
-.soon p{font-size:.8125rem;color:var(--muted)}
-.soon .badge{align-self:start}
+.soon-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.soon-feat{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:14px}
+.soon-feat .s{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:16px;display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:start;border-style:solid}
+.soon-feat .thumb{aspect-ratio:4/5}
+.soon-feat .ft{display:flex;flex-direction:column;gap:8px}
+.soon-grid .s{background:var(--surface);border:1.5px dashed var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px}
+.soon-grid h3,.soon-feat h3{font-size:1.0625rem}
+.soon-grid p,.soon-feat p{font-size:.8125rem;color:var(--muted)}
+.s .badge{align-self:flex-start;width:max-content}
 
 /* Past drops */
 .drops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -335,6 +339,28 @@ dialog::backdrop{background:rgba(15,21,19,.5)}
 .drawer footer .sum{display:flex;justify-content:space-between;font-weight:800}
 .drawer footer small{color:var(--muted);font-size:.75rem;text-align:center}
 
+/* Resume button + snapshot viewer */
+.resume-btn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:700;font-size:.8125rem;text-decoration:none;background:var(--surface)}
+.resume-btn:hover{border-color:var(--ink)}
+.resume-btn svg,.dl svg,.btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dl{display:inline-flex;align-items:center;gap:6px}
+.snapbtn{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-weight:700;font-size:.8125rem;align-self:start;display:inline-flex;gap:8px;align-items:center}
+.snapbtn:hover{border-color:var(--ink)}
+.snapbtn::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--brand)}
+.s .thumb{border-radius:10px;overflow:hidden;aspect-ratio:16/10;background:var(--soft);border:1px solid var(--line)}
+.s .thumb img{width:100%;height:100%;object-fit:cover;object-position:top}
+.lb{width:min(1100px,100% - 24px);max-height:92vh;border-radius:20px}
+.lb[open]{display:flex;flex-direction:column}
+.lb header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.lb header h2{font-size:1.2rem}
+.lb header p{font-size:.75rem;color:var(--muted)}
+.lb .x{position:static;box-shadow:none;background:var(--soft);flex:none}
+.lb .track{display:flex;gap:16px;overflow:auto;padding:18px 20px 22px;align-items:flex-start;background:var(--soft);scroll-snap-type:x mandatory}
+.lb figure{margin:0;flex:none;scroll-snap-align:start;max-height:calc(92vh - 130px);overflow:auto;border-radius:12px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
+.lb figure img{display:block;width:min(980px,82vw);max-width:none;height:auto}
+.lb figure.narrow img{width:300px}
+@media (max-width:640px){.resume-btn span{display:none}.resume-btn{padding:9px}.lb figure.narrow img{width:72vw}}
+
 /* Toast */
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:999px;font-weight:700;font-size:.875rem;opacity:0;pointer-events:none;transition:.25s;z-index:60}
 .toast.on{opacity:1;transform:translate(-50%,0)}
@@ -344,7 +370,8 @@ dialog::backdrop{background:rgba(15,21,19,.5)}
   .nav{display:none}
   .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .cats{grid-template-columns:repeat(4,minmax(0,1fr));row-gap:22px}
-  .soon,.drops{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .soon-grid,.drops{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .soon-feat{grid-template-columns:1fr}
 }
 @media (max-width:860px){
   .hero .wrap,.pdp,.story,.ck{grid-template-columns:1fr}
@@ -387,7 +414,8 @@ dialog::backdrop{background:rgba(15,21,19,.5)}
   .usp div:nth-child(-n+2){border-top:0}
   .usp div:nth-child(2n){border-left:1px solid var(--line)!important}
   .usp div:last-child{grid-column:1/-1}
-  .soon,.drops{grid-template-columns:1fr}
+  .soon-grid,.drops{grid-template-columns:1fr}
+  .soon-feat .s{grid-template-columns:120px 1fr;gap:14px}
   .label dl{grid-template-columns:1fr}
   .label dt{border-bottom:0;padding-bottom:0}
   .sticker{width:84px;height:84px;left:-6px}
@@ -428,6 +456,7 @@ dialog::backdrop{background:rgba(15,21,19,.5)}
       <a href="#story">Our story</a>
     </nav>
     <div class="icons">
+      <a class="resume-btn" href="assets/Meetanshi-Tomar-Resume.pdf" download aria-label="Download resume (PDF)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span>Resume</span></a>
       <button class="ibtn" id="themeBtn" type="button" aria-label="Switch colour theme">
         <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
         <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -454,6 +483,7 @@ dialog::backdrop{background:rgba(15,21,19,.5)}
         <div class="ctas">
           <a class="btn primary" href="#shop">Shop my work <span aria-hidden="true">→</span></a>
           <button class="btn outline" type="button" data-hire>Add me to cart</button>
+          <a class="btn outline" href="assets/Meetanshi-Tomar-Resume.pdf" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Resume</a>
         </div>
         <div class="assure"><span>Liquid &amp; Online Store 2.0</span><span>JavaScript &amp; Cart API</span><span>AWS &amp; Next.js</span></div>
       </div>
@@ -538,7 +568,7 @@ dialog::backdrop{background:rgba(15,21,19,.5)}
         <article class="p" data-id="serum" data-cat="landing best" data-date="2026-08-20" data-rank="4">
           <button class="p-media" type="button" data-qv aria-label="Quick view: Hair Growth Serum landing page"><img src="assets/img/serum-sci.jpg" alt="The Science Behind It card grid on the Hair Growth Serum landing page" width="960" height="333" loading="lazy" decoding="async"><span class="badges"><span class="badge best">Bestseller</span></span><span class="qv-hint" aria-hidden="true">Quick view</span></button>
           <div class="p-body"><span class="status past">Built · screenshots from staging</span><h3 class="p-title">Hair Growth Serum landing page</h3><p class="p-sub">A story-led page for ad traffic that keeps the real buy box and reviews.</p><div class="p-price"><b>8</b><span>new sections</span></div><div class="p-actions"><button class="add" type="button" data-add>Add to shortlist</button><button class="qvb" type="button" data-qv>View</button></div></div>
-          <div class="qv" hidden><p>A story-led page for ad traffic, built as an alternate product template with eight new sections, so shoppers still get the real buy box and reviews.</p><p>The theme's root font size isn't 16px: it's 13px on mobile and a fluid 0.8vw on desktop, so every rem came out wrong. I rebuilt the type scale in px clamp() and measured it back from the page.</p><div class="facts"><div><b>8</b><span>Sections</span></div><div><b>34→58px</b><span>Heading scale</span></div></div><p class="note">The staging theme it was previewed on has since been cleared, so there is no public link right now.</p></div>
+          <div class="qv" hidden><p>A story-led page for ad traffic, built as an alternate product template with eight new sections, so shoppers still get the real buy box and reviews.</p><p>The theme's root font size isn't 16px: it's 13px on mobile and a fluid 0.8vw on desktop, so every rem came out wrong. I rebuilt the type scale in px clamp() and measured it back from the page.</p><div class="facts"><div><b>8</b><span>Sections</span></div><div><b>34→58px</b><span>Heading scale</span></div></div><button class="snapbtn" type="button" data-snap="assets/img/serum-m.jpg|assets/img/serum-sci.jpg" data-snap-narrow="0" data-snap-title="Hair Growth Serum landing page">See snapshots</button></div>
         </article>
 
         <article class="p" data-id="variant" data-cat="collections new" data-date="2026-11-06" data-rank="5">
@@ -622,7 +652,7 @@ dialog::backdrop{background:rgba(15,21,19,.5)}
         <article class="p" data-id="blog" data-cat="landing blog" data-date="2026-09-16" data-rank="18">
           <button class="p-media" type="button" data-qv aria-label="Quick view: Good Skin Blog"><img src="assets/img/blog.jpg" alt="The redesigned Good Skin Blog" width="960" height="600" loading="lazy" decoding="async"><span class="qv-hint" aria-hidden="true">Quick view</span></button>
           <div class="p-body"><span class="status review">In review</span><h3 class="p-title">Good Skin Blog</h3><p class="p-sub">Tag tabs filter in place; every page gets breadcrumbs with structured data.</p><div class="p-price"><b>2</b><span>sections + sitewide breadcrumbs</span></div><div class="p-actions"><button class="add" type="button" data-add>Add to shortlist</button><button class="qvb" type="button" data-qv>View</button></div></div>
-          <div class="qv" hidden><p>A featured-post slider and a landing grid whose tag tabs filter in place through the Section Rendering API, plus sitewide breadcrumbs with BreadcrumbList structured data.</p><a class="link" href="https://consciouschemist.com/blogs/good-skin-blog?preview_theme_id=183876026665" target="_blank" rel="noopener">Preview ↗</a></div>
+          <div class="qv" hidden><p>A featured-post slider and a landing grid whose tag tabs filter in place through the Section Rendering API, plus sitewide breadcrumbs with BreadcrumbList structured data.</p><button class="snapbtn" type="button" data-snap="assets/snap/blog.jpg" data-snap-title="Good Skin Blog redesign">See snapshot</button></div>
         </article>
 
         <article class="p" data-id="homepage" data-cat="campaigns" data-date="2025-11-15" data-rank="19">
@@ -674,9 +704,11 @@ dialog::backdrop{background:rgba(15,21,19,.5)}
   <section class="sec" id="soon" aria-labelledby="soon-h">
     <div class="wrap">
       <div class="sec-head"><div><span class="eyebrow">Coming soon</span><h2 id="soon-h">Built, tested, waiting to launch</h2></div><p>Finished and previewed on staging themes; the store decides when they go live.</p></div>
-      <div class="soon">
-        <div class="s"><span class="badge soon">Pre-order</span><h3>Skin quiz</h3><p>Two designs (12 and 8 questions) in one section. Results pull from the concern collections and add a full routine to the cart in one tap.</p></div>
-        <div class="s"><span class="badge soon">Pre-order</span><h3>Product compare</h3><p>Tick products on any collection and compare price, size and ingredients side by side. Rows are set in theme settings.</p></div>
+      <div class="soon-feat">
+        <div class="s feat"><div class="thumb"><img src="assets/snap/quiz-result.jpg" alt="Skin quiz result with a personalised routine" loading="lazy" decoding="async"></div><div class="ft"><span class="badge soon">Pre-order</span><h3>Skin quiz</h3><p>Two designs (12 and 8 questions) in one section. Results pull from the concern collections and add a full routine to the cart in one tap.</p><button class="snapbtn" type="button" data-snap="assets/snap/quiz-1.jpg|assets/snap/quiz-2.jpg|assets/snap/quiz-result.jpg" data-snap-narrow="all" data-snap-title="Skin quiz">See snapshots</button></div></div>
+        <div class="s feat"><div class="thumb"><img src="assets/snap/compare.jpg" alt="Product compare dialog with three products side by side" loading="lazy" decoding="async"></div><div class="ft"><span class="badge soon">Pre-order</span><h3>Product compare</h3><p>Tick products on any collection and compare price, size and ingredients side by side. Rows are set in theme settings.</p><button class="snapbtn" type="button" data-snap="assets/snap/compare.jpg" data-snap-title="Product compare">See snapshot</button></div></div>
+      </div>
+      <div class="soon-grid">
         <div class="s"><span class="badge soon">Pre-order</span><h3>Black Friday collection</h3><p>A hero with a time-zone-safe countdown, its own filters and sorting, and product rails.</p></div>
         <div class="s"><span class="badge soon">Pre-order</span><h3>Defender editorial page</h3><p>A 17-section editorial product page for the Defender Night Cream.</p></div>
         <div class="s"><span class="badge soon">Pre-order</span><h3>Flash sale timer</h3><p>A countdown banner section marketing can drop on any page.</p></div>
@@ -748,7 +780,7 @@ dialog::backdrop{background:rgba(15,21,19,.5)}
         <span class="eyebrow">Checkout</span>
         <h2>Ready to check out?</h2>
         <p>Have a Shopify store that needs to load faster, sell more, or stop fighting its own theme? Send me your shortlist, or just say hello.</p>
-        <div class="ctas"><button class="btn primary" type="button" id="openCart2">View my shortlist</button><a class="btn outline" href="mailto:meetanshi987@gmail.com">Email me</a></div>
+        <div class="ctas"><button class="btn primary" type="button" id="openCart2">View my shortlist</button><a class="btn outline" href="assets/Meetanshi-Tomar-Resume.pdf" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Download resume</a></div>
       </div>
       <div class="order" aria-label="Order summary">
         <h3>Order summary</h3>
@@ -758,6 +790,7 @@ dialog::backdrop{background:rgba(15,21,19,.5)}
         <div class="line"><span>Email</span><span><a href="mailto:meetanshi987@gmail.com">meetanshi987@gmail.com</a></span></div>
         <div class="line"><span>LinkedIn</span><span><a href="https://linkedin.com/in/meetanshi-tomar-574407255/" target="_blank" rel="noopener">/in/meetanshi-tomar</a></span></div>
         <div class="line"><span>GitHub</span><span><a href="https://github.com/meetanshi089" target="_blank" rel="noopener">@meetanshi089</a></span></div>
+        <div class="line"><span>Resume</span><span><a class="dl" href="assets/Meetanshi-Tomar-Resume.pdf" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>PDF, 2 pages</a></span></div>
         <div class="line tot"><span>Status</span><span>Available</span></div>
         <a class="btn primary block" href="mailto:meetanshi987@gmail.com?subject=Shopify%20developer%20role">Place order <span aria-hidden="true">→</span></a>
       </div>
@@ -789,8 +822,14 @@ dialog::backdrop{background:rgba(15,21,19,.5)}
   <footer>
     <div class="sum"><span>Projects</span><span id="sumN">0</span></div>
     <a class="btn primary block" id="checkoutBtn" href="mailto:meetanshi987@gmail.com">Checkout: email Meetanshi <span aria-hidden="true">→</span></a>
-    <small>Opens your email app with the list filled in.</small>
+    <a class="btn outline block" href="assets/Meetanshi-Tomar-Resume.pdf" download><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Download resume (PDF)</a>
+    <small>Checkout opens your email app with the list filled in.</small>
   </footer>
+</dialog>
+
+<dialog class="lb" id="lb" aria-labelledby="lbTitle">
+  <header><div><h2 id="lbTitle">Snapshot</h2><p>Captured from the store's preview theme, Nov 2026. Hosted here, so this link never expires.</p></div><button class="x" type="button" data-close aria-label="Close snapshots">×</button></header>
+  <div class="track" id="lbTrack"></div>
 </dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -894,8 +933,19 @@ dialog::backdrop{background:rgba(15,21,19,.5)}
   });
   document.getElementById('qvBody').addEventListener('click',function(e){var a=e.target.closest('a[href^="#"]');if(a)qv.close()});
 
+  /* Snapshot viewer (delegated, so it also works inside quick view) */
+  var lb=document.getElementById('lb'), lbTrack=document.getElementById('lbTrack');
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-snap]'); if(!b)return;
+    var srcs=b.dataset.snap.split('|'), narrow=b.dataset.snapNarrow||'';
+    lbTrack.innerHTML='';
+    srcs.forEach(function(s,i){var f=document.createElement('figure');if(narrow==='all'||narrow===String(i))f.className='narrow';var im=document.createElement('img');im.src=s;im.alt=(b.dataset.snapTitle||'Snapshot')+', '+(i+1)+' of '+srcs.length;f.appendChild(im);lbTrack.appendChild(f)});
+    document.getElementById('lbTitle').textContent=b.dataset.snapTitle||'Snapshot';
+    if(qv.open)qv.close(); lb.showModal(); lbTrack.scrollLeft=0;
+  });
+
   /* Close buttons + backdrop click */
-  [qv,drawer].forEach(function(d){
+  [qv,drawer,lb].forEach(function(d){
     d.querySelectorAll('[data-close]').forEach(function(b){b.addEventListener('click',function(){d.close()})});
     d.addEventListener('click',function(e){if(e.target!==d)return;var r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close()});
   });
