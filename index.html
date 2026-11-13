@@ -70,10 +70,9 @@
   .hero-top{display:flex; gap:24px; align-items:flex-start}
   .hero-text{flex:1; min-width:0}
   .avatar{
-    flex:none; width:94px; height:94px; border-radius:50%; object-fit:cover;
+    flex:none; width:104px; height:104px; border-radius:50%; object-fit:cover; object-position:50% 18%;
     border:1px solid var(--line); box-shadow:var(--shadow); background:var(--surface-2);
-    display:grid; place-items:center; font-size:1.7rem; font-weight:600; color:var(--faint);
-    letter-spacing:.02em;
+    display:block;
   }
   h1{font-size:clamp(1.95rem,5.4vw,2.65rem); line-height:1.1; margin:0 0 .45rem; letter-spacing:-.025em}
   .tagline{font-size:1rem; color:var(--accent-ink); font-weight:600; margin:0 0 1.1rem; line-height:1.45}
@@ -91,7 +90,7 @@
   .btn.ghost:hover{border-color:var(--accent); color:var(--accent-ink); opacity:1}
   @media (max-width:560px){
     .hero-top{flex-direction:column-reverse; align-items:flex-start; gap:18px}
-    .avatar{width:76px; height:76px; font-size:1.4rem}
+    .avatar{width:84px; height:84px}
   }
 
   /* ---------- stat strip ---------- */
@@ -183,6 +182,7 @@
     <a class="brand" href="#top">Meetanshi Tomar</a>
     <nav class="nav-links">
       <a href="#work">Work</a>
+      <a href="#projects">Projects</a>
       <a href="#how">How I work</a>
       <a href="#stack">Stack</a>
       <a href="#about">About</a>
@@ -204,7 +204,8 @@
         <h1>hi, I&rsquo;m Meetanshi!</h1>
         <p class="tagline">Shopify Developer · Liquid &amp; Online Store 2.0 · Performance · AWS</p>
       </div>
-      <div class="avatar" id="avatar" aria-hidden="true">MT</div>
+      <img class="avatar" src="img/meetanshi.jpg" width="520" height="520"
+           alt="Meetanshi Tomar" fetchpriority="high">
     </div>
     <p class="lede">
       I build the parts of a storefront that have to work every time &mdash; <strong>bundle and cart
@@ -318,6 +319,40 @@
     </article>
   </section>
 
+  <section id="projects">
+    <p class="kicker">Personal project · Jun 2026 &mdash; present</p>
+    <h2 class="sec-h">Eternity Classes, an online tutoring platform</h2>
+    <p class="sec-sub">
+      Built and deployed on my own &mdash; the part of my work where I own the whole stack,
+      from the database schema up.
+    </p>
+
+    <article class="case reveal">
+      <h3>Four portals, one codebase</h3>
+      <div class="tags"><span class="tag">Next.js 15</span><span class="tag">React 19</span><span class="tag">TypeScript</span><span class="tag">Supabase</span><span class="tag">PostgreSQL</span><span class="tag">Prisma</span><span class="tag">Tailwind</span></div>
+      <p><span class="label">The problem.</span> A tutoring business runs on scheduling,
+        attendance, homework and parent communication &mdash; usually spread across WhatsApp groups
+        and spreadsheets, where nothing is auditable and nothing is private.</p>
+      <p><span class="label">What I did.</span> Built role-based portals for admins, teachers,
+        students and parents covering class scheduling, attendance, homework approvals with file
+        attachments, 1-to-1 chat, announcements, web push, and CSV import/export. Data is secured
+        with <b>Supabase row-level security</b> plus server-side permission checks, and per-user
+        time zones are stored in UTC and rendered locally.</p>
+      <p><span class="label">The interesting part.</span> A chat safety system that blocks phone
+        numbers, emails and outside meeting links &mdash; including disguised forms like &ldquo;at the
+        rate&rdquo; or spelled-out digits. Repeated attempts write audit entries and alert an admin.</p>
+      <div class="result">
+        <p class="result-h">Result · login to dashboard</p>
+        <div class="bars">
+          <div class="bar-row"><span class="who">Before</span><span class="track"><span class="fill" data-w="100"></span></span><span class="val">2.8s</span></div>
+          <div class="bar-row hi"><span class="who">After</span><span class="track"><span class="fill" data-w="14"></span></span><span class="val">0.4s</span></div>
+        </div>
+        <span class="delta">7&times; faster &mdash; by reading the role from the sign-in response and
+          validating JWTs locally in middleware, instead of a round trip</span>
+      </div>
+    </article>
+  </section>
+
   <section id="how">
     <p class="kicker">How I work</p>
     <h2 class="sec-h">Six habits, mostly learned the hard way</h2>
@@ -339,11 +374,14 @@
       <dd>Liquid · Online Store 2.0 · sections &amp; blocks · JSON templates · Cart API ·
           Section Rendering API · metafields &amp; metaobjects · Shopify CLI</dd>
       <dt>Front end</dt>
-      <dd>JavaScript (custom elements) · HTML · CSS (Grid, Flexbox, <code>clamp()</code>) ·
-          responsive images · JSON-LD · React</dd>
+      <dd>JavaScript (custom elements) · TypeScript · React · Next.js App Router · HTML ·
+          CSS (Grid, Flexbox, <code>clamp()</code>) · Tailwind · responsive images · JSON-LD</dd>
+      <dt>Back end &amp; data</dt>
+      <dd>Supabase Auth · PostgreSQL · Supabase Storage · row-level security · Prisma · Zod ·
+          Web Push</dd>
       <dt>Cloud</dt>
       <dd>AWS — Lambda · API Gateway · DynamoDB · S3 · Amplify · CloudWatch · SNS ·
-          Amazon Bedrock</dd>
+          Amazon Bedrock · Vercel</dd>
       <dt>Performance</dt>
       <dd>Core Web Vitals · Lighthouse · PageSpeed Insights · Playwright</dd>
       <dt>Integrations</dt>
@@ -361,8 +399,14 @@
     </p>
     <p class="lede">
       Right now I work across three codebases &mdash; the storefront theme, the bundle logic, and an
-      AI skin-analysis tool on AWS that sends customers a PDF report over WhatsApp. I like that
-      range, and I am looking for a team where I can keep it.
+      AI skin-analysis tool on AWS that sends customers a PDF report over WhatsApp. Outside that I
+      build and run Eternity Classes end to end, which is where I get to own the database and the
+      auth model as well as the front end. I like that range, and I am looking for a team where I
+      can keep it.
+    </p>
+    <p class="lede">
+      BCA in Web Application Development, The NorthCap University (2022&ndash;25).
+      Based in Gurugram, and happy to work remotely.
     </p>
   </section>
 
@@ -371,7 +415,12 @@
     <h2 class="sec-h">Hiring a Shopify developer?</h2>
     <p class="sec-sub">
       Happy to walk through any of the work above, including the parts that live in private repos.
+      Gurugram &middot; open to remote.
     </p>
+    <div class="contact-row">
+      <span class="mono" id="mail">meetanshi987@gmail.com</span>
+      <button class="copy" id="copyBtn" type="button">Copy</button>
+    </div>
     <div class="contact-row">
       <a class="btn ghost" href="https://linkedin.com/in/meetanshi-tomar-574407255">LinkedIn</a>
       <a class="btn ghost" href="https://github.com/meetanshi089">GitHub</a>
@@ -421,9 +470,26 @@
     els.forEach(function(e){ io.observe(e); });
   })();
 
+  // copy email
+  (function(){
+    var btn = document.getElementById('copyBtn'), mail = document.getElementById('mail');
+    if (!btn || !mail) return;
+    btn.addEventListener('click', function(){
+      var done = function(){ btn.textContent = 'Copied'; setTimeout(function(){ btn.textContent = 'Copy'; }, 1600); };
+      var text = mail.textContent.trim();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function(){ btn.textContent = 'Press Ctrl+C'; });
+      } else {
+        var r = document.createRange(); r.selectNodeContents(mail);
+        var s = getSelection(); s.removeAllRanges(); s.addRange(r);
+        try { document.execCommand('copy'); done(); } catch(e){ btn.textContent = 'Press Ctrl+C'; }
+      }
+    });
+  })();
+
   // active nav link
   (function(){
-    var ids = ['work','how','stack','about','contact'];
+    var ids = ['work','projects','how','stack','about','contact'];
     var links = {};
     ids.forEach(function(id){ links[id] = document.querySelector('.nav-links a[href="#' + id + '"]'); });
     var secs = ids.map(function(id){ return document.getElementById(id); }).filter(Boolean);
