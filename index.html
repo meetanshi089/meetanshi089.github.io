@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meetanshi Tomar — Shopify Developer</title>
+<meta name="description" content="Shopify developer. Liquid, Online Store 2.0 and AWS for a live D2C skincare store — bundle logic, theme migration, Core Web Vitals.">
+<meta property="og:title" content="Meetanshi Tomar — Shopify Developer">
+<meta property="og:description" content="Liquid, Online Store 2.0 and AWS for a live D2C skincare store.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --bg:#fbfaf8; --surface:#ffffff; --surface-2:#f4f2ee;
+    --text:#17191a; --muted:#5e6163; --faint:#8b8f91;
+    --line:#e5e2dc; --accent:#1f6f54; --accent-soft:#e9f3ee; --accent-ink:#17503c;
+    --shadow:0 1px 2px rgba(20,22,24,.04), 0 8px 24px -12px rgba(20,22,24,.10);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#111314; --surface:#1a1d1e; --surface-2:#212425;
+      --text:#f1f0ee; --muted:#a6a9ab; --faint:#7e8284;
+      --line:#2b2f30; --accent:#6ed4a8; --accent-soft:#172a23; --accent-ink:#6ed4a8;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#111314; --surface:#1a1d1e; --surface-2:#212425;
+    --text:#f1f0ee; --muted:#a6a9ab; --faint:#7e8284;
+    --line:#2b2f30; --accent:#6ed4a8; --accent-soft:#172a23; --accent-ink:#6ed4a8;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth; scroll-padding-top:70px}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:780px; margin:0 auto; padding-inline:20px}
+
+  /* ---------- nav ---------- */
+  .nav{
+    position:sticky; top:0; z-index:50; background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:saturate(1.6) blur(10px); border-bottom:1px solid var(--line);
+  }
+  .nav-in{max-width:780px; margin:0 auto; padding:11px 20px; display:flex; align-items:center; gap:14px}
+  .brand{font-weight:650; text-decoration:none; color:var(--text); letter-spacing:-.01em; font-size:.95rem; white-space:nowrap}
+  .nav-links{display:flex; gap:3px; margin-left:auto; overflow-x:auto; scrollbar-width:none}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links a{
+    font-size:.85rem; text-decoration:none; color:var(--muted); padding:5px 10px;
+    border-radius:7px; white-space:nowrap; transition:color .15s, background .15s;
+  }
+  .nav-links a:hover{color:var(--text); background:var(--surface-2)}
+  .nav-links a.on{color:var(--accent-ink); background:var(--accent-soft); font-weight:600}
+  .theme-btn{
+    flex:none; background:var(--surface); border:1px solid var(--line); color:var(--muted);
+    width:31px; height:31px; border-radius:8px; cursor:pointer; font-size:.9rem; line-height:1;
+    display:grid; place-items:center;
+  }
+  .theme-btn:hover{color:var(--text); border-color:var(--accent)}
+
+  /* ---------- hero ---------- */
+  header{padding-block:60px 46px}
+  .badges{display:flex; gap:7px; margin-bottom:20px; flex-wrap:wrap}
+  .badge{
+    font-size:.76rem; font-weight:600; letter-spacing:.01em; padding:4px 11px; border-radius:999px;
+    background:var(--accent-soft); color:var(--accent-ink); border:1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+  .hero-top{display:flex; gap:24px; align-items:flex-start}
+  .hero-text{flex:1; min-width:0}
+  .avatar{
+    flex:none; width:94px; height:94px; border-radius:50%; object-fit:cover;
+    border:1px solid var(--line); box-shadow:var(--shadow); background:var(--surface-2);
+    display:grid; place-items:center; font-size:1.7rem; font-weight:600; color:var(--faint);
+    letter-spacing:.02em;
+  }
+  h1{font-size:clamp(1.95rem,5.4vw,2.65rem); line-height:1.1; margin:0 0 .45rem; letter-spacing:-.025em}
+  .tagline{font-size:1rem; color:var(--accent-ink); font-weight:600; margin:0 0 1.1rem; line-height:1.45}
+  .lede{font-size:1.08rem; color:var(--muted); margin:0 0 .9rem; max-width:58ch}
+  .lede strong{color:var(--text); font-weight:600}
+  .cta{display:flex; gap:10px; margin-top:26px; flex-wrap:wrap}
+  .btn{
+    font-size:.9rem; font-weight:600; text-decoration:none; padding:10px 18px; border-radius:9px;
+    border:1px solid var(--accent); background:var(--accent); color:var(--bg);
+    transition:opacity .15s, transform .1s;
+  }
+  .btn:hover{opacity:.88}
+  .btn:active{transform:translateY(1px)}
+  .btn.ghost{background:var(--surface); color:var(--text); border-color:var(--line)}
+  .btn.ghost:hover{border-color:var(--accent); color:var(--accent-ink); opacity:1}
+  @media (max-width:560px){
+    .hero-top{flex-direction:column-reverse; align-items:flex-start; gap:18px}
+    .avatar{width:76px; height:76px; font-size:1.4rem}
+  }
+
+  /* ---------- stat strip ---------- */
+  .stats{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(132px,1fr)); gap:1px;
+    background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden;
+  }
+  .stat{background:var(--surface); padding:16px 17px}
+  .stat b{display:block; font-size:1.4rem; letter-spacing:-.02em; font-variant-numeric:tabular-nums; line-height:1.15}
+  .stat span{display:block; font-size:.79rem; color:var(--muted); margin-top:3px; line-height:1.4}
+
+  /* ---------- sections ---------- */
+  section{padding-block:50px; border-top:1px solid var(--line)}
+  .kicker{font-size:.76rem; text-transform:uppercase; letter-spacing:.1em; color:var(--faint); margin:0 0 .5rem; font-weight:650}
+  .sec-h{font-size:clamp(1.3rem,3.6vw,1.7rem); margin:0 0 .7rem; letter-spacing:-.022em; line-height:1.22}
+  .sec-sub{color:var(--muted); margin:0 0 2rem; max-width:58ch}
+
+  /* ---------- case studies ---------- */
+  .case{
+    background:var(--surface); border:1px solid var(--line); border-radius:13px;
+    padding:22px; margin-bottom:16px; box-shadow:var(--shadow);
+  }
+  .case:last-child{margin-bottom:0}
+  .case h3{font-size:1.14rem; margin:0 0 .7rem; letter-spacing:-.015em; line-height:1.3}
+  .tags{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px}
+  .tag{
+    font-size:.73rem; font-weight:500; color:var(--muted); background:var(--surface-2);
+    border:1px solid var(--line); border-radius:6px; padding:3px 8px; white-space:nowrap;
+  }
+  .case p{margin:0 0 .85rem; font-size:.95rem}
+  .case p:last-of-type{margin-bottom:0}
+  .case p b{color:var(--text); font-weight:650}
+  .label{color:var(--accent-ink); font-weight:650}
+
+  .result{margin-top:17px; padding-top:16px; border-top:1px dashed var(--line)}
+  .result-h{font-size:.76rem; text-transform:uppercase; letter-spacing:.09em; color:var(--faint); font-weight:650; margin:0 0 11px}
+  .bars{display:grid; gap:9px}
+  .bar-row{display:grid; grid-template-columns:62px 1fr auto; align-items:center; gap:11px; font-size:.84rem}
+  .bar-row .who{color:var(--muted); font-weight:500}
+  .track{height:9px; background:var(--surface-2); border-radius:999px; overflow:hidden}
+  .fill{height:100%; width:0; border-radius:999px; background:var(--line); transition:width .9s cubic-bezier(.22,.8,.3,1)}
+  .bar-row.hi .fill{background:var(--accent)}
+  .bar-row.hi .who, .bar-row.hi .val{color:var(--accent-ink); font-weight:650}
+  .val{font-variant-numeric:tabular-nums; color:var(--muted); min-width:54px; text-align:right}
+  .delta{display:inline-block; margin-top:11px; font-size:.82rem; font-weight:650; color:var(--accent-ink)}
+
+  /* ---------- how I work ---------- */
+  .steps{display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden}
+  .step{background:var(--surface); padding:17px 18px}
+  .step .n{font-size:.73rem; font-weight:700; color:var(--accent-ink); letter-spacing:.04em}
+  .step b{display:block; margin:5px 0 4px; font-size:.97rem; letter-spacing:-.01em}
+  .step span{font-size:.86rem; color:var(--muted); line-height:1.5}
+
+  /* ---------- toolkit ---------- */
+  dl{margin:0; display:grid; grid-template-columns:132px 1fr; gap:.9rem 1.3rem}
+  dt{font-weight:650; font-size:.88rem}
+  dd{margin:0; color:var(--muted); font-size:.92rem; line-height:1.6}
+  @media (max-width:560px){
+    dl{grid-template-columns:1fr; gap:.2rem 0}
+    dd{margin-bottom:.9rem}
+  }
+
+  /* ---------- contact ---------- */
+  .contact-row{display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-bottom:11px}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.92rem}
+  .copy{
+    font-size:.78rem; font-weight:600; padding:5px 11px; border-radius:7px; cursor:pointer;
+    border:1px solid var(--line); background:var(--surface); color:var(--muted);
+  }
+  .copy:hover{border-color:var(--accent); color:var(--accent-ink)}
+  a.link{color:var(--text); text-decoration-color:var(--accent); text-underline-offset:3px}
+  a.link:hover{color:var(--accent-ink)}
+  footer{padding-block:34px 70px; border-top:1px solid var(--line); font-size:.87rem; color:var(--faint)}
+  footer p{margin:0 0 .35rem}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.88em; background:var(--accent-soft); color:var(--accent-ink); padding:1px 5px; border-radius:4px}
+  .reveal{opacity:0; transform:translateY(12px); transition:opacity .5s ease, transform .5s ease}
+  .reveal.in{opacity:1; transform:none}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .reveal{opacity:1; transform:none; transition:none}
+    .fill{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top">Meetanshi Tomar</a>
+    <nav class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#how">How I work</a>
+      <a href="#stack">Stack</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle colour theme">◐</button>
+  </div>
+</div>
+
+<div class="wrap" id="top">
+
+  <header>
+    <div class="badges">
+      <span class="badge">🛍 Shopify</span>
+      <span class="badge">☁ AWS</span>
+    </div>
+    <div class="hero-top">
+      <div class="hero-text">
+        <h1>hi, I&rsquo;m Meetanshi!</h1>
+        <p class="tagline">Shopify Developer · Liquid &amp; Online Store 2.0 · Performance · AWS</p>
+      </div>
+      <div class="avatar" id="avatar" aria-hidden="true">MT</div>
+    </div>
+    <p class="lede">
+      I build the parts of a storefront that have to work every time &mdash; <strong>bundle and cart
+      logic, sale mechanics, and the pages paid traffic lands on</strong>.
+    </p>
+    <p class="lede">
+      For the past year that has meant <a class="link" href="https://consciouschemist.com">consciouschemist.com</a>,
+      a live D2C skincare and haircare store: 729 shipped changes, a theme migration, and an
+      AI skin-analysis tool running on AWS.
+    </p>
+    <div class="cta">
+      <a class="btn" href="#work">See the work</a>
+      <a class="btn ghost" href="#contact">Say hi</a>
+    </div>
+  </header>
+
+  <section id="work" style="border-top:none; padding-top:0">
+    <div class="stats reveal">
+      <div class="stat"><b>+15%</b><span>Average order value after the bundle builder</span></div>
+      <div class="stat"><b>87</b><span>Collection templates matched before launch</span></div>
+      <div class="stat"><b>729</b><span>Changes shipped across 3 codebases</span></div>
+      <div class="stat"><b>2.1s</b><span>Desktop LCP, real-user data</span></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">Selected work · Conscious Chemist, Sep 2025 &mdash; present</p>
+    <h2 class="sec-h">Four things I built, and what changed</h2>
+    <p class="sec-sub">
+      Production work on a live store, so most of the code sits in private repositories.
+      Here is what each piece had to solve.
+    </p>
+
+    <article class="case reveal">
+      <h3>A bundle builder on the product page</h3>
+      <div class="tags"><span class="tag">Liquid</span><span class="tag">JavaScript</span><span class="tag">Cart API</span><span class="tag">AOV</span></div>
+      <p><span class="label">The problem.</span> Customers bought one product at a time. The store
+        had offers running, but nothing on the product page made a second or third item feel like
+        the obvious choice.</p>
+      <p><span class="label">What I did.</span> Built a bundle builder from scratch &mdash;
+        <b>Buy X Get Y Free</b> and fixed-price discount tiers, a savings summary that updates as
+        you pick, and a quick view so nobody has to leave the page. It hands off straight to
+        checkout. Three versions shipped in the first month.</p>
+      <div class="result">
+        <p class="result-h">Result · average order value</p>
+        <div class="bars">
+          <div class="bar-row"><span class="who">Before</span><span class="track"><span class="fill" data-w="68"></span></span><span class="val">₹799</span></div>
+          <div class="bar-row hi"><span class="who">After</span><span class="track"><span class="fill" data-w="100"></span></span><span class="val">₹920</span></div>
+        </div>
+        <span class="delta">↑ 15% per order</span>
+      </div>
+    </article>
+
+    <article class="case reveal">
+      <h3>Migrating the store to a modular theme</h3>
+      <div class="tags"><span class="tag">Online Store 2.0</span><span class="tag">JSON templates</span><span class="tag">Sections</span></div>
+      <p><span class="label">The problem.</span> The old theme meant a developer had to touch code
+        for routine content changes, and the new theme could not go live until every page matched
+        what customers already saw.</p>
+      <p><span class="label">What I did.</span> Matched all <b>87 collection templates</b> against
+        the previous production theme before launch, and fixed a sitewide product-grid bug plus a
+        header that was covering page content. Rebuilt key pages as editable sections &mdash; 13 for
+        About Us, 17 for a Defender Cream editorial page &mdash; so marketing can rearrange them
+        without me.</p>
+      <div class="result">
+        <p class="result-h">Result · launch parity</p>
+        <div class="bars">
+          <div class="bar-row hi"><span class="who">Matched</span><span class="track"><span class="fill" data-w="100"></span></span><span class="val">87 / 87</span></div>
+        </div>
+        <span class="delta">Live on consciouschemist.com</span>
+      </div>
+    </article>
+
+    <article class="case reveal">
+      <h3>Making the store pass Core Web Vitals</h3>
+      <div class="tags"><span class="tag">Core Web Vitals</span><span class="tag">Lighthouse</span><span class="tag">JSON-LD</span></div>
+      <p><span class="label">The problem.</span> Pages were slow in a way that paid traffic pays
+        for twice &mdash; once in ad spend, once in bounced visitors.</p>
+      <p><span class="label">What I did.</span> Preloaded the largest image on home, collection and
+        product pages, deferred render-blocking scripts, and cut the Google Fonts request from
+        <b>18 weights to 2</b>. Added Organization, Breadcrumb and LocalBusiness structured data.</p>
+      <div class="result">
+        <p class="result-h">Result · font weights requested</p>
+        <div class="bars">
+          <div class="bar-row"><span class="who">Before</span><span class="track"><span class="fill" data-w="100"></span></span><span class="val">18</span></div>
+          <div class="bar-row hi"><span class="who">After</span><span class="track"><span class="fill" data-w="11"></span></span><span class="val">2</span></div>
+        </div>
+        <span class="delta">Desktop CWV passing · LCP 2.1s · INP 178ms · CLS 0.02</span>
+      </div>
+    </article>
+
+    <article class="case reveal">
+      <h3>The outage that logged nothing</h3>
+      <div class="tags"><span class="tag">AWS Lambda</span><span class="tag">API Gateway</span><span class="tag">CORS</span><span class="tag">Debugging</span></div>
+      <p><span class="label">The problem.</span> The AI skin test stopped producing reports. No
+        errors in CloudWatch, and <code>curl</code> against the API worked perfectly. From the
+        server side nothing looked broken at all.</p>
+      <p><span class="label">What I did.</span> The production API Gateway was missing one custom
+        header in its CORS preflight response. The browser was blocking OTP verification
+        <b>before the request ever reached Lambda</b> &mdash; which is why nothing was logged, and why
+        curl passed: curl does not send a preflight. Synced the production config to match,
+        then added CloudWatch 4xx/5xx alarms with SNS alerts so the next failure is noisy.</p>
+      <div class="result">
+        <p class="result-h">Result</p>
+        <div class="bars">
+          <div class="bar-row"><span class="who">Before</span><span class="track"><span class="fill" data-w="3"></span></span><span class="val">0 reports</span></div>
+          <div class="bar-row hi"><span class="who">After</span><span class="track"><span class="fill" data-w="100"></span></span><span class="val">restored</span></div>
+        </div>
+        <span class="delta">One header. Whole pipeline back.</span>
+      </div>
+    </article>
+  </section>
+
+  <section id="how">
+    <p class="kicker">How I work</p>
+    <h2 class="sec-h">Six habits, mostly learned the hard way</h2>
+    <div class="steps reveal">
+      <div class="step"><span class="n">01</span><b>Read the live site first</b><span>Before changing a theme I find out what customers actually see today. Parity is the requirement.</span></div>
+      <div class="step"><span class="n">02</span><b>Check both widths</b><span>Every change gets looked at on mobile and desktop. Most storefront bugs are layout bugs.</span></div>
+      <div class="step"><span class="n">03</span><b>Trust the server</b><span>Cart totals and gift logic come from what Shopify confirms, never from client state.</span></div>
+      <div class="step"><span class="n">04</span><b>Reproduce in a browser</b><span>CORS and preflights taught me that curl passing proves nothing about a real user.</span></div>
+      <div class="step"><span class="n">05</span><b>Hand it to marketing</b><span>Pages ship as editable sections. If a copy change needs a developer, I built it wrong.</span></div>
+      <div class="step"><span class="n">06</span><b>Write it down</b><span>Every change goes in a log, and anything with a runbook gets one. Future me is a stranger.</span></div>
+    </div>
+  </section>
+
+  <section id="stack">
+    <p class="kicker">Toolkit</p>
+    <h2 class="sec-h">What I work with</h2>
+    <dl class="reveal">
+      <dt>Shopify</dt>
+      <dd>Liquid · Online Store 2.0 · sections &amp; blocks · JSON templates · Cart API ·
+          Section Rendering API · metafields &amp; metaobjects · Shopify CLI</dd>
+      <dt>Front end</dt>
+      <dd>JavaScript (custom elements) · HTML · CSS (Grid, Flexbox, <code>clamp()</code>) ·
+          responsive images · JSON-LD · React</dd>
+      <dt>Cloud</dt>
+      <dd>AWS — Lambda · API Gateway · DynamoDB · S3 · Amplify · CloudWatch · SNS ·
+          Amazon Bedrock</dd>
+      <dt>Performance</dt>
+      <dd>Core Web Vitals · Lighthouse · PageSpeed Insights · Playwright</dd>
+      <dt>Integrations</dt>
+      <dd>Shiprocket checkout · Wizzy search · Nector loyalty · WOM reviews · MSG91 OTP</dd>
+    </dl>
+  </section>
+
+  <section id="about">
+    <p class="kicker">About</p>
+    <h2 class="sec-h">A bit more</h2>
+    <p class="lede">
+      I came to Shopify from general web development, and what kept me there is how directly the
+      work connects to something you can measure. A bundle either lifts the order value or it does
+      not. A page either passes Core Web Vitals or it does not.
+    </p>
+    <p class="lede">
+      Right now I work across three codebases &mdash; the storefront theme, the bundle logic, and an
+      AI skin-analysis tool on AWS that sends customers a PDF report over WhatsApp. I like that
+      range, and I am looking for a team where I can keep it.
+    </p>
+  </section>
+
+  <section id="contact">
+    <p class="kicker">Contact</p>
+    <h2 class="sec-h">Hiring a Shopify developer?</h2>
+    <p class="sec-sub">
+      Happy to walk through any of the work above, including the parts that live in private repos.
+    </p>
+    <div class="contact-row">
+      <a class="btn ghost" href="https://linkedin.com/in/meetanshi-tomar-574407255">LinkedIn</a>
+      <a class="btn ghost" href="https://github.com/meetanshi089">GitHub</a>
+      <a class="btn ghost" href="https://consciouschemist.com">Live store</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Meetanshi Tomar · Shopify developer · Liquid, Online Store 2.0, AWS</p>
+    <p>Hand-written HTML and CSS, no framework. Checked at both widths, naturally.</p>
+  </footer>
+
+</div>
+
+<script>
+  // theme toggle
+  (function(){
+    var btn = document.getElementById('themeBtn'), root = document.documentElement;
+    try { var s = localStorage.getItem('theme'); if (s) root.setAttribute('data-theme', s); } catch(e){}
+    btn.addEventListener('click', function(){
+      var cur = root.getAttribute('data-theme');
+      if (!cur) cur = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch(e){}
+    });
+  })();
+
+  // reveal on scroll + animate result bars
+  (function(){
+    var els = document.querySelectorAll('.reveal, .case');
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.fill').forEach(function(f){ f.style.width = f.dataset.w + '%'; });
+      els.forEach(function(e){ e.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        en.target.classList.add('in');
+        en.target.querySelectorAll('.fill').forEach(function(f, i){
+          setTimeout(function(){ f.style.width = f.dataset.w + '%'; }, 90 * i);
+        });
+        io.unobserve(en.target);
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: .15 });
+    els.forEach(function(e){ io.observe(e); });
+  })();
+
+  // active nav link
+  (function(){
+    var ids = ['work','how','stack','about','contact'];
+    var links = {};
+    ids.forEach(function(id){ links[id] = document.querySelector('.nav-links a[href="#' + id + '"]'); });
+    var secs = ids.map(function(id){ return document.getElementById(id); }).filter(Boolean);
+    if (!('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        for (var k in links) if (links[k]) links[k].classList.remove('on');
+        var l = links[en.target.id]; if (l) l.classList.add('on');
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    secs.forEach(function(s){ io.observe(s); });
+  })();
+</script>
+</body>
+</html>
